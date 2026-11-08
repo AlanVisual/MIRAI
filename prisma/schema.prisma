@@ -1,0 +1,87 @@
+// Prisma schema for the Sistema Escolar de Reporte de Tickets
+// Docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  MAESTRO
+  ENCARGADO
+}
+
+enum TicketStatus {
+  PENDIENTE
+  EN_PROCESO
+  RESUELTO
+  CANCELADO
+}
+
+model User {
+  id             String   @id @default(cuid())
+  email          String   @unique
+  name           String
+  role           Role     @default(MAESTRO)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  ticketsCreated Ticket[] @relation("TicketAuthor")
+  ticketsHandled Ticket[] @relation("TicketHandler")
+}
+
+model Ticket {
+  id          String       @id @default(cuid())
+  title       String
+  description String
+  status      TicketStatus @default(PENDIENTE)
+  authorId    String
+  handlerId   String?
+  buildingId  String
+  locationId  String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  author      User         @relation("TicketAuthor", fields: [authorId], references: [id])
+  handler     User?        @relation("TicketHandler", fields: [handlerId], references: [id])
+  building    Building     @relation(fields: [buildingId], references: [id])
+  location    Location     @relation(fields: [locationId], references: [id])
+  attachments Attachment[]
+
+  @@index([authorId])
+  @@index([handlerId])
+  @@index([buildingId])
+  @@index([locationId])
+}
+
+model Building {
+  id          String     @id @default(cuid())
+  number      Int        @unique
+  name        String
+  description String?
+  locations   Location[]
+  tickets     Ticket[]
+}
+
+model Location {
+  id         String   @id @default(cuid())
+  name       String
+  buildingId String
+  building   Building @relation(fields: [buildingId], references: [id], onDelete: Cascade)
+  tickets    Ticket[]
+
+  @@index([buildingId])
+}
+
+model Attachment {
+  id        String   @id @default(cuid())
+  url       String
+  ticketId  String
+  createdAt DateTime @default(now())
+  ticket    Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+
+  @@index([ticketId])
+}
