@@ -67,7 +67,7 @@ export async function registerAction(
   }
 
   if (data.session) {
-    redirect(role === Role.ENCARGADO ? "/admin" : "/dashboard");
+    redirect("/dashboard");
   }
 
   return {
@@ -97,21 +97,15 @@ export async function loginAction(
     return { error: "Correo o contraseña incorrectos." };
   }
 
-  let destination = "/dashboard";
-
   if (data.user) {
     try {
-      const profile = await syncUserProfile(data.user);
-
-      if (profile.role === Role.ENCARGADO) {
-        destination = "/admin";
-      }
+      await syncUserProfile(data.user);
     } catch (cause) {
       console.error("No se pudo sincronizar el usuario con Prisma:", cause);
     }
   }
 
-  redirect(destination);
+  redirect("/dashboard");
 }
 
 export async function logoutAction() {

@@ -147,9 +147,8 @@ export async function createTicketAction(
     };
   }
 
-  revalidatePath("/tickets");
   revalidatePath("/dashboard");
-  redirect("/tickets");
+  redirect("/dashboard");
 }
 
 export async function updateTicketStatusAction(
@@ -197,8 +196,6 @@ export async function updateTicketStatusAction(
   });
 
   revalidatePath(`/tickets/${ticketId}`);
-  revalidatePath("/tickets");
-  revalidatePath("/admin");
   revalidatePath("/dashboard");
 
   return { success: "Estado actualizado correctamente." };

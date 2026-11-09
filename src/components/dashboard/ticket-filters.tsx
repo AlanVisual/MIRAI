@@ -36,7 +36,7 @@ export function TicketFilters({
   return (
     <form
       method="get"
-      action="/admin"
+      action="/dashboard"
       className="flex flex-wrap items-end gap-3 rounded-2xl border border-black/[.08] bg-white p-4 dark:border-white/[.145] dark:bg-zinc-950"
     >
       <label className="flex min-w-60 flex-[2] flex-col gap-1.5 text-sm font-medium">
@@ -96,7 +96,7 @@ export function TicketFilters({
           Filtrar
         </button>
         <Link
-          href="/admin"
+          href="/dashboard"
           className="inline-flex h-10 items-center justify-center rounded-full border border-black/[.12] px-4 text-sm font-medium transition-colors hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-white/[.08]"
         >
           Limpiar

@@ -12,17 +12,17 @@ export default async function NewTicketPage() {
   }
 
   if (user.role === "ENCARGADO") {
-    redirect("/tickets");
+    redirect("/dashboard");
   }
 
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-col gap-6">
       <div>
         <Link
-          href="/tickets"
+          href="/dashboard"
           className="text-sm text-zinc-600 underline-offset-4 hover:underline dark:text-zinc-400"
         >
-          ← Volver a tickets
+          ← Volver al dashboard
         </Link>
         <h1 className="mt-2 text-2xl font-semibold tracking-tight">
           Nuevo ticket

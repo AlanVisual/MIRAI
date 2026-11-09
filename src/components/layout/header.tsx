@@ -46,36 +46,12 @@ export async function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-black/[.08] bg-white/80 backdrop-blur dark:border-white/[.145] dark:bg-black/80">
       <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
-        <div className="flex items-center gap-6">
-          <Link
-            href="/dashboard"
-            className="text-lg font-semibold tracking-tight"
-          >
-            MIRAI
-          </Link>
-          <nav className="hidden items-center gap-1 sm:flex">
-            <Link
-              href="/dashboard"
-              className="rounded-md px-3 py-1.5 text-sm text-zinc-600 transition-colors hover:bg-black/[.04] hover:text-foreground dark:text-zinc-400 dark:hover:bg-white/[.08]"
-            >
-              Dashboard
-            </Link>
-            <Link
-              href="/tickets"
-              className="rounded-md px-3 py-1.5 text-sm text-zinc-600 transition-colors hover:bg-black/[.04] hover:text-foreground dark:text-zinc-400 dark:hover:bg-white/[.08]"
-            >
-              Tickets
-            </Link>
-            {role === "ENCARGADO" ? (
-              <Link
-                href="/admin"
-                className="rounded-md px-3 py-1.5 text-sm text-zinc-600 transition-colors hover:bg-black/[.04] hover:text-foreground dark:text-zinc-400 dark:hover:bg-white/[.08]"
-              >
-                Panel
-              </Link>
-            ) : null}
-          </nav>
-        </div>
+        <Link
+          href="/dashboard"
+          className="text-lg font-semibold tracking-tight"
+        >
+          MIRAI
+        </Link>
 
         <div className="flex items-center gap-3">
           <div className="hidden text-right sm:block">

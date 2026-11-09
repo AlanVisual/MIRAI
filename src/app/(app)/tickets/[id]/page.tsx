@@ -39,10 +39,10 @@ async function TicketDetail({ params }: { params: Params }) {
   const isEncargado = user.role === "ENCARGADO";
 
   if (!isEncargado && ticket.authorId !== user.id) {
-    redirect("/tickets");
+    redirect("/dashboard");
   }
 
-  const backHref = isEncargado ? "/admin" : "/tickets";
+  const backHref = "/dashboard";
 
   return (
     <div className="mx-auto flex w-full max-w-4xl flex-col gap-6">
