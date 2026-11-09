@@ -6,18 +6,16 @@ import { getAllTickets, getTicketsForUser } from "@/actions/ticket-queries";
 import { TicketCard } from "@/components/tickets/ticket-card";
 import { getCurrentUser } from "@/lib/auth";
 
-async function TicketsList() {
-  const user = await getCurrentUser();
-
-  if (!user) {
-    redirect("/login");
-  }
-
-  const isManager = user.role === "ENCARGADO";
-
+async function TicketsList({
+  isManager,
+  userId,
+}: {
+  isManager: boolean;
+  userId: string;
+}) {
   const tickets = isManager
     ? await getAllTickets()
-    : await getTicketsForUser(user.id);
+    : await getTicketsForUser(userId);
 
   if (tickets.length === 0) {
     return (
@@ -27,12 +25,14 @@ async function TicketsList() {
             ? "Aún no hay tickets reportados en la escuela."
             : "Aún no has reportado ningún ticket."}
         </p>
-        <Link
-          href="/tickets/new"
-          className="inline-flex h-10 items-center justify-center rounded-full bg-foreground px-5 text-sm font-medium text-background transition-opacity hover:opacity-90"
-        >
-          {isManager ? "Crear un ticket" : "Crear primer reporte"}
-        </Link>
+        {isManager ? null : (
+          <Link
+            href="/tickets/new"
+            className="inline-flex h-10 items-center justify-center rounded-full bg-foreground px-5 text-sm font-medium text-background transition-opacity hover:opacity-90"
+          >
+            Crear primer reporte
+          </Link>
+        )}
       </div>
     );
   }
@@ -59,26 +59,38 @@ function TicketsSkeleton() {
   );
 }
 
-export default function TicketsPage() {
+export default async function TicketsPage() {
+  const user = await getCurrentUser();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  const isManager = user.role === "ENCARGADO";
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Tickets</h1>
           <p className="mt-1 text-zinc-600 dark:text-zinc-400">
-            Historial de los tickets reportados.
+            {isManager
+              ? "Todos los tickets de la escuela. Abre uno para cambiar su estado."
+              : "Historial de los tickets que has reportado."}
           </p>
         </div>
-        <Link
-          href="/tickets/new"
-          className="inline-flex h-10 items-center justify-center rounded-full bg-foreground px-5 text-sm font-medium text-background transition-opacity hover:opacity-90"
-        >
-          + Nuevo ticket
-        </Link>
+        {isManager ? null : (
+          <Link
+            href="/tickets/new"
+            className="inline-flex h-10 items-center justify-center rounded-full bg-foreground px-5 text-sm font-medium text-background transition-opacity hover:opacity-90"
+          >
+            + Nuevo ticket
+          </Link>
+        )}
       </div>
 
       <Suspense fallback={<TicketsSkeleton />}>
-        <TicketsList />
+        <TicketsList isManager={isManager} userId={user.id} />
       </Suspense>
     </div>
   );

@@ -1,8 +1,20 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 import { CreateTicketForm } from "@/components/tickets/create-ticket-form";
+import { getCurrentUser } from "@/lib/auth";
 
-export default function NewTicketPage() {
+export default async function NewTicketPage() {
+  const user = await getCurrentUser();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  if (user.role === "ENCARGADO") {
+    redirect("/tickets");
+  }
+
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-col gap-6">
       <div>
